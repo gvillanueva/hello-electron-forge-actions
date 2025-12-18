@@ -1,4 +1,5 @@
 # hello-electron-forge-actions
+[![Continuous Integration Checks - Lint, TypeCheck, Build](https://github.com/gvillanueva/hello-electron-forge-actions/actions/workflows/ci.yml/badge.svg)](https://github.com/gvillanueva/hello-electron-forge-actions/actions/workflows/ci.yml)
 
 Boilerplate Electron Forge project configured with TypeScript and webpack. Includes basic GitHub Actions CI for linting, TypeScript type-checking, and a fast build check.
 
