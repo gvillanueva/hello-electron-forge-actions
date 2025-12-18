@@ -1,0 +1,47 @@
+# Runs eslint, TypeScript type checking, and project build to ensure code quality
+name: Continuous Integration Checks - Lint, TypeCheck, Build
+
+on:
+  push:
+    branches: [ main, develop, release/**, hotfix/**, feature/**, bugfix/** ]
+  pull_request:
+    branches: [ main, develop, release/** ]
+
+jobs:
+  lint-typecheck-build:
+    name: Setup Development Environment
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest] 
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 24.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+
+      - name: Cache Node.js modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci
+ 
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Run TypeScript type checking
+        run: npx tsc --noEmit
+
+      - name: Build the project
+        run: npm run package
+        env:
+          CI: true # Tunes build for CI environments
